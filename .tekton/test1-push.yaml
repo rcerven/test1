@@ -86,19 +86,19 @@ spec:
     results:
     - description: ""
       name: IMAGE_URL
-      value: $(tasks.build-container.results.IMAGE_URL)
+      value: ""
     - description: ""
       name: IMAGE_DIGEST
-      value: $(tasks.build-container.results.IMAGE_DIGEST)
+      value: ""
     - description: ""
       name: CHAINS-GIT_URL
-      value: $(tasks.clone-repository.results.url)
+      value: ""
     - description: ""
       name: CHAINS-GIT_COMMIT
-      value: $(tasks.clone-repository.results.commit)
+      value: ""
     - description: ""
       name: JAVA_COMMUNITY_DEPENDENCIES
-      value: $(tasks.build-container.results.JAVA_COMMUNITY_DEPENDENCIES)
+      value: ""
     tasks:
     - name: init
       params:
