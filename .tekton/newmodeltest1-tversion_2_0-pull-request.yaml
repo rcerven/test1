@@ -1,0 +1,35 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  annotations:
+    appstudio.openshift.io/version: TVersion 2.0
+    build.appstudio.openshift.io/repo: https://github.com/rcerven/test1?rev={{revision}}
+    build.appstudio.redhat.com/commit_sha: '{{revision}}'
+    build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
+    build.appstudio.redhat.com/target_branch: '{{target_branch}}'
+    pipelinesascode.tekton.dev/cancel-in-progress: "true"
+    pipelinesascode.tekton.dev/max-keep-runs: "3"
+    pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch
+      == "main" && ( "./docker/***".pathChanged() || ".tekton/newmodeltest1-tversion_2_0-pull-request.yaml".pathChanged()
+      || "Containerfile".pathChanged() )
+  creationTimestamp: null
+  labels:
+    appstudio.openshift.io/component: newmodeltest1
+    pipelines.appstudio.openshift.io/type: build
+  name: newmodeltest1-tversion_2_0-on-pull-request
+  namespace: rcerven-test
+spec:
+  params:
+  - name: git-url
+    value: '{{source_url}}'
+  - name: revision
+    value: '{{revision}}'
+  pipelineRef:
+    name: build-rpm-package
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-newmodeltest1
+  workspaces:
+  - name: git-auth
+    secret:
+      secretName: '{{ git_auth_secret }}'
+status: {}
