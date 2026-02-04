@@ -1,0 +1,33 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  annotations:
+    appstudio.openshift.io/version: TVersion 1.0
+    build.appstudio.openshift.io/repo: https://github.com/rcerven/test1?rev={{revision}}
+    build.appstudio.redhat.com/commit_sha: '{{revision}}'
+    build.appstudio.redhat.com/target_branch: '{{target_branch}}'
+    pipelinesascode.tekton.dev/cancel-in-progress: "false"
+    pipelinesascode.tekton.dev/max-keep-runs: "3"
+    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
+      == "main"
+  creationTimestamp: null
+  labels:
+    appstudio.openshift.io/component: newmodeltest1
+    pipelines.appstudio.openshift.io/type: build
+  name: newmodeltest1-tversion_1_0-on-push
+  namespace: rcerven-test
+spec:
+  params:
+  - name: git-url
+    value: '{{source_url}}'
+  - name: revision
+    value: '{{revision}}'
+  pipelineRef:
+    name: build-rpm-package
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-newmodeltest1
+  workspaces:
+  - name: git-auth
+    secret:
+      secretName: '{{ git_auth_secret }}'
+status: {}
