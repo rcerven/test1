@@ -2,18 +2,19 @@ apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   annotations:
-    build.appstudio.openshift.io/repo: https://github.com/rcerven/test1?rev={{revision}}
-    build.appstudio.redhat.com/commit_sha: '{{revision}}'
-    build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
-    build.appstudio.redhat.com/target_branch: '{{target_branch}}'
-    pipelinesascode.tekton.dev/cancel-in-progress: "true"
-    pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch
-      == "main"
+      build.appstudio.openshift.io/repo: https://github.com/rcerven/test1?rev={{revision}}
+      build.appstudio.redhat.com/commit_sha: '{{revision}}'
+      build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
+      build.appstudio.redhat.com/target_branch: '{{target_branch}}'
+      pipelinesascode.tekton.dev/cancel-in-progress: "true"
+      pipelinesascode.tekton.dev/max-keep-runs: "3"
+      pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch
+        == "main"
   labels:
-    appstudio.openshift.io/application: testapp1
-    appstudio.openshift.io/component: comp1-app1
-    pipelines.appstudio.openshift.io/type: build
+    # some comment
+      appstudio.openshift.io/application: testapp1
+      appstudio.openshift.io/component: comp1-app1
+      pipelines.appstudio.openshift.io/type: build
   name: comp1-app1-on-pull-request
   namespace: rcerven-test
 spec:
