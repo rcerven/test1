@@ -2,18 +2,18 @@ apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   annotations:
-    build.appstudio.openshift.io/repo: https://github.com/rcerven/test1?rev={{revision}}
-    build.appstudio.redhat.com/commit_sha: '{{revision}}'
-    build.appstudio.redhat.com/target_branch: '{{target_branch}}'
+    build.konflux-ci.dev/commit_sha: '{{revision}}'
+    build.konflux-ci.dev/repo: https://github.com/rcerven/test1?rev={{revision}}
+    build.konflux-ci.dev/target_branch: '{{target_branch}}'
+    build.konflux-ci.dev/version: comp2-app2
     pipelinesascode.tekton.dev/cancel-in-progress: "false"
     pipelinesascode.tekton.dev/max-keep-runs: "3"
     pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
-      == "test"
+      == "test" && builds_enabled == "true"
   labels:
-    appstudio.openshift.io/application: testapp2
-    appstudio.openshift.io/component: comp3-app2
-    pipelines.appstudio.openshift.io/type: build
-  name: comp3-app2-on-push
+    build.konflux-ci.dev/component: comp2-app2-comp3-app2
+    pipelines.konflux-ci.dev/type: build
+  name: comp2-app2-comp3-app2-comp2-app2-on-push
   namespace: rcerven-test
 spec:
   params:
@@ -420,7 +420,7 @@ spec:
     - name: netrc
       optional: true
   taskRunTemplate:
-    serviceAccountName: build-pipeline-comp3-app2
+    serviceAccountName: build-pipeline-comp2-app2-comp3-app2
   workspaces:
   - name: git-auth
     secret:
