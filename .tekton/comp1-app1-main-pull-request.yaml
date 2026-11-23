@@ -2,19 +2,19 @@ apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   annotations:
-    build.appstudio.openshift.io/repo: https://github.com/rcerven/test1?rev={{revision}}
-    build.appstudio.redhat.com/commit_sha: '{{revision}}'
-    build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
-    build.appstudio.redhat.com/target_branch: '{{target_branch}}'
+    build.konflux-ci.dev/commit_sha: '{{revision}}'
+    build.konflux-ci.dev/pull_request_number: '{{pull_request_number}}'
+    build.konflux-ci.dev/repo: https://github.com/rcerven/test1?rev={{revision}}
+    build.konflux-ci.dev/target_branch: '{{target_branch}}'
+    build.konflux-ci.dev/version: main
     pipelinesascode.tekton.dev/cancel-in-progress: "true"
     pipelinesascode.tekton.dev/max-keep-runs: "3"
     pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch
-      == "main"
+      == "main" && builds_enabled == "true"
   labels:
-    appstudio.openshift.io/application: testapp1
-    appstudio.openshift.io/component: comp1-app1
-    pipelines.appstudio.openshift.io/type: build
-  name: comp1-app1-on-pull-request
+    build.konflux-ci.dev/component: comp1-app1
+    pipelines.konflux-ci.dev/type: build
+  name: comp1-app1-main-on-pull-request
   namespace: rcerven-test
 spec:
   params:
