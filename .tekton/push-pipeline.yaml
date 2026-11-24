@@ -10,9 +10,10 @@ metadata:
     pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
       == "main"
   labels:
-    appstudio.openshift.io/application: testapp1
-    appstudio.openshift.io/component: comp1-app1
-    pipelines.appstudio.openshift.io/type: build
+      # comment 1
+      appstudio.openshift.io/application: testapp1
+      appstudio.openshift.io/component: comp1-app1 #comment 2
+      pipelines.appstudio.openshift.io/type: build # comment 3
   name: comp1-app1-on-push
   namespace: rcerven-test
 spec:
