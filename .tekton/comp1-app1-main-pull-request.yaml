@@ -2,20 +2,19 @@ apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   annotations:
-    build.appstudio.openshift.io/repo: https://github.com/rcerven/test1?rev={{revision}}
-    build.appstudio.redhat.com/commit_sha: '{{revision}}'
-    build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
-    build.appstudio.redhat.com/target_branch: '{{target_branch}}'
+    build.konflux-ci.dev/repo: https://github.com/rcerven/test1?rev={{revision}}
+    build.konflux-ci.dev/commit_sha: '{{revision}}'
+    build.konflux-ci.dev/pull_request_number: '{{pull_request_number}}'
+    build.konflux-ci.dev/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/cancel-in-progress: "true"
     pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch
-      == "main"
+    pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch == "main" && builds_enabled == "true"
+    build.konflux-ci.dev/context: .
+    build.konflux-ci.dev/version: main
   labels:
-      # comment1
-      appstudio.openshift.io/application: testapp1
-      appstudio.openshift.io/component: comp1-app1 # comment 2
-      pipelines.appstudio.openshift.io/type: build # comment 3
-  name: comp1-app1-on-pull-request
+    build.konflux-ci.dev/component: comp1-app1 # comment 2
+    pipelines.konflux-ci.dev/type: build # comment 3
+  name: comp1-app1-main-on-pull-request
   namespace: rcerven-test
 spec:
   params:
@@ -51,13 +50,11 @@ spec:
       name: output-image
       type: string
     - default: .
-      description: Path to the source code of an application's component from where
-        to build image.
+      description: Path to the source code of an application's component from where to build image.
       name: path-context
       type: string
     - default: Dockerfile
-      description: Path to the Dockerfile inside the context specified by parameter
-        path-context
+      description: Path to the Dockerfile inside the context specified by parameter path-context
       name: dockerfile
       type: string
     - default: "false"
@@ -73,8 +70,7 @@ spec:
       name: prefetch-input
       type: string
     - default: ""
-      description: Image tag expiration time, time values could be something like
-        1h, 2d, 3w for hours, days, and weeks, respectively.
+      description: Image tag expiration time, time values could be something like 1h, 2d, 3w for hours, days, and weeks, respectively.
       name: image-expires-after
       type: string
     - default: "false"
@@ -82,8 +78,7 @@ spec:
       name: build-image-index
       type: string
     - default: docker
-      description: The format for the resulting image's mediaType. Valid values are
-        oci or docker.
+      description: The format for the resulting image's mediaType. Valid values are oci or docker.
       name: buildah-format
       type: string
     - default: "false"
@@ -93,8 +88,7 @@ spec:
       description: Use the package registry proxy when prefetching dependencies
       name: enable-package-registry-proxy
     - default: .
-      description: Target directories in component's source code to scan with SAST
-        tools. Multiple values should be separated with commas.
+      description: Target directories in component's source code to scan with SAST tools. Multiple values should be separated with commas.
       name: sast-target-dirs
       type: string
     - default: []
@@ -106,24 +100,19 @@ spec:
       name: build-args-file
       type: string
     - default: "false"
-      description: Whether to enable privileged mode, should be used only with remote
-        VMs
+      description: Whether to enable privileged mode, should be used only with remote VMs
       name: privileged-nested
       type: string
     - default: ""
-      description: Sets the image created time and the SOURCE_DATE_EPOCH build argument.
-        On its own, it does not change file timestamps inside the layers (set rewrite-timestamp
-        to "true" for that). Leave empty to keep the actual build time.
+      description: Sets the image created time and the SOURCE_DATE_EPOCH build argument. On its own, it does not change file timestamps inside the layers (set rewrite-timestamp to "true" for that). Leave empty to keep the actual build time.
       name: source-date-epoch
       type: string
     - default: "false"
-      description: When "true", clamp file modification times in the image layers
-        to at most source-date-epoch. Does nothing unless source-date-epoch is set.
+      description: When "true", clamp file modification times in the image layers to at most source-date-epoch. Does nothing unless source-date-epoch is set.
       name: rewrite-timestamp
       type: string
     - default: "false"
-      description: When "true", omit the build history (history timestamps, layer
-        metadata, etc.) from the resulting image.
+      description: When "true", omit the build history (history timestamps, layer metadata, etc.) from the resulting image.
       name: omit-history
       type: string
     results:
